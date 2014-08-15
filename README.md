@@ -43,6 +43,7 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 * All service deployments are soft deployments.  GoLive is handled through flipr.
 * If integration tests fail, rollback/uninstall the deployed service.
 * When master commit triggers CICD, deploy to dev/test, run tests, then deploy to staging, run tests, then deploy to prod.  This helps prevents bad services from taking down prod on a soft deployment.
+* All actions required to build/test/package an application should be done with a task runner like Gulp.  The CICD job should only need to clone, run gulp, and then deploy the package.
 
 # Feature flags and dynamic configuration are paramount
 Every action that can be taken in the system should be wrapped in a feature flag.  A feature flag is really just dynamic configuration: a value that changes based on some context (the current user, the current environment, what time of day it is, etc).  Flipr is all about dynamic configuration.  Using flipr, a feature flag translates roughly to a key/value pair.  The key is the action being taken and the value is used to change the behavior of the feature.  Changing the behavior does not have to mean just enabling and disabling it.  As you code the feature, think about any other variables that may need to change based on the user context.
