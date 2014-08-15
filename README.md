@@ -37,6 +37,22 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 7. Update service hash in flipr config, commit
 
 # More on CICD
+* All service deployments are soft deployments.  GoLive is handled through flipr.
 * If integration tests fail, rollback/uninstall the deployed service.
 * When master commit triggers CICD, deploy to dev/test, run tests, then deploy to staging, run tests, then deploy to prod.  This helps prevents bad services from taking down prod on a soft deployment.
-* All service deployments are soft deployments.  GoLive is handled through flipr.
+
+# Example API Request
+Let's say I want to call our API to get information on a product (GET /v1/products/1234).  How does that request get from my browser all the way to the service that will get me the informatin I need?
+1. HTTP Request GET /v1/products/1234
+2. DNS is pointing to a load balancer, which round-robin routes to a web server.
+3. Nginx, listening on 80/443 will accept request, terminate SSL, and route to API port based on the host header
+4. Main API will perform authentication and set user context.
+5. Based on the route, API determines that we need to talk to products-service
+6. API will check flipr config to see which version of products-service it should talk to
+7. API will then check with service discovery to see where that version products-service lives
+8. API will then proxy the request to the appropriate instance of products-service
+9. Products-service will accept the request and perform any authorization needed based on the user context
+10. Products-service will get the product information and send the response
+11. API will receive the response and forward it on to nginx
+12. Nginx will receive the response and forward it on to the load balancer
+13. Load balancer will receive the response and send it back to the client
