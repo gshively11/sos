@@ -24,6 +24,7 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 * SSO: node-gd-auth
 * Proxy between node processes: node-http-proxy
 * Scaffolding: yeoman
+* Dev Environment Setup: vagrant
 * Message Bus: ??? - kafka or RabbitMQ
 * Server Configuration: ??? - chef, puppet, ansible
 * Log Writer: ???
