@@ -22,6 +22,7 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 * Self-service Operations: rundeck
 * Application Configuraiton and Feature Flipping: node-flipr-etcd
 * SSO: node-gd-auth
+* Proxy between node processes: node-http-proxy
 * Message Bus: ??? - kafka or RabbitMQ
 * Server Configuration: ??? - chef, puppet, ansible
 * Log Writer: ???
@@ -50,7 +51,7 @@ Let's say I want to call our API to get information on a product (GET /v1/produc
 5. Based on the route, API determines that we need to talk to products-service
 6. API will check flipr config to see which version of products-service it should talk to
 7. API will then check with service discovery to see where that version products-service lives
-8. API will then proxy the request to the appropriate instance of products-service
+8. API will then proxy the request to the appropriate instance of products-service using node-http-proxy
 9. Products-service will accept the request and perform any authorization needed based on the user context
 10. Products-service will get the product information and send the response
 11. API will receive the response and forward it on to nginx
