@@ -44,6 +44,7 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 
 # Example API Request
 Let's say I want to call our API to get information on a product (GET /v1/products/1234).  How does that request get from my browser all the way to the service that will get me the informatin I need?
+
 1. HTTP Request GET /v1/products/1234
 2. DNS is pointing to a load balancer, which round-robin routes to a web server.
 3. Nginx, listening on 80/443 will accept request, terminate SSL, and route to API port based on the host header
