@@ -81,3 +81,7 @@ We need an automated process to clean up old services on our servers.  Because e
 * Services need to be able to identify themselves to SR without having some pre-existing config.  Once a service identifies itself, SR should start monitoring the service, without the service needing to do a heartbeat.  SR should also have a way to specify services to monitor via config.  SR should provide a way to write modules to perform healthchecks on non-http services.
 * Services should attempt to hit other services on localhost before trying other ips.
 * Services should have retry logic to handle situations when a service reported by SD goes down.
+
+# Pretty Pictures
+
+http://www.gliffy.com/go/publish/5986962
