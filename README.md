@@ -1,7 +1,7 @@
 sos
 ===
 
-Service-oriented Stack - Technologies and strategies for making a service-oriented application.
+Service-oriented Stack - Technologies and strategies for making a service-oriented application.  This is a mind dump and is not guaranteed to be organized or sane.
 
 # Building Blocks
 
