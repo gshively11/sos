@@ -31,7 +31,7 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 
 # Feature Request to Go Live
 1. Create branch, make changes
-2. When changes can be deployed, create PR (doesn't have to be feature complete)
+2. When changes can be safely deployed, create PR (doesn't have to be feature complete)
 3. PR automatically triggers CICD: build, test, deploy to dev/test
 4. Code is peer reviewed
 5. Merge to master
@@ -42,6 +42,9 @@ Service-oriented Stack - Technologies and strategies for making a service-orient
 * All service deployments are soft deployments.  GoLive is handled through flipr.
 * If integration tests fail, rollback/uninstall the deployed service.
 * When master commit triggers CICD, deploy to dev/test, run tests, then deploy to staging, run tests, then deploy to prod.  This helps prevents bad services from taking down prod on a soft deployment.
+
+# Feature flags and dynamic configuration are paramount
+Every action that can be taken in the system should be wrapped in a feature flag.  A feature flag is really just dynamic configuration: a value that changes based on some context (the current user, the current environment, what time of day it is, etc).  Flipr is all about dynamic configuration.  Using flipr, a feature flag translates roughly to a key/value pair.  The key is the action being taken and the value is used to change the behavior of the feature.  Changing the behavior does not have to mean just enabling and disabling it.  As you code the feature, think about any other variables that may need to change based on the user context.
 
 # Example API Request
 Let's say I want to call our API to get information on a product (GET /v1/products/1234).  How does that request get from my browser all the way to the service that will get me the informatin I need?
@@ -61,8 +64,17 @@ Let's say I want to call our API to get information on a product (GET /v1/produc
 13. Load balancer will receive the response and send it back to the client
 
 # Strategies for dealing with an explosion of services
+
+## Tracing requests across a web of services
 At the nginx level, we should be generating a uuid for all requests, which is added as a header.  This header will be added to the nginx access logs.  It will also be persisted during all internal proxying of the request, and all services will use the uuid when writing logs.  This will allow us to trace all the steps a request takes in our system.  Furthermore, if we send an error response back to the client, the UI should display the uuid to the user, telling them to reference this uuid when reporting errors.  This will allow us to immediately start diagnosing a specific client's problem without having to dig for it based on timestamp and/or user matching.
 
 Here's an nginx module to add the request id: https://github.com/newobj/nginx-x-rid-header
 
+All services should write detailed logs about all requests which should be dumped into elasticsearch.  A kibana dashboard can be used to view an individual request's path through the web of services.
+
+## Keeping things neat and tidy
 We need an automated process to clean up old services on our servers.  Because each deployment spawns a separate process, we will eventually eat up all our resources (ports, memory) if we don't clean them up.  Ideally, the automated process could be told something like "remove any service that hasn't received any traffic after X number of days".  If completely automated removal is determined to be too risky, we need to provide a tool that can easily give us the information we need to make the kill decision and a button click to perform it.
+
+# Unorganized Thoughts
+* We should use the git hash for versioning
+* We need to expose flipr config over an endpoint so it can be pulled in by the client
