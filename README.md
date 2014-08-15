@@ -77,6 +77,11 @@ All services should write detailed logs about all requests which should be dumpe
 ## Keeping things neat and tidy
 We need an automated process to clean up old services on our servers.  Because each deployment spawns a separate process, we will eventually eat up all our resources (ports, memory) if we don't clean them up.  Ideally, the automated process could be told something like "remove any service that hasn't received any traffic after X number of days".  If completely automated removal is determined to be too risky, we need to provide a tool that can easily give us the information we need to make the kill decision and a button click to perform it.
 
+# Development Environment
+There should be 0 work required by the developer to get a service running on their local machine.  Ideally, we would want to use something like vagrant to automatically spin up a VM for the service to run in.  Vagrant combined with some Configuration Management service will take care of bootstrapping all dependencies.  This will keep a developer's local machine free of clutter while ensuring that all they have to do to get started is git clone and vagrant up.
+
+We'll need to figure out how to use vagrant to spin up an image of our entire web server, not just an individual service, since we'll want to run the locally just as we run them in our other environments.
+
 # Unorganized Thoughts
 * We should use the git hash for versioning
 * We need to expose flipr config over an endpoint so it can be pulled in by the client
